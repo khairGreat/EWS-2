@@ -6,8 +6,15 @@ from pathlib import Path
 df = None
 
 try:
-    _dataUrl = Path(os.getcwd()).parent / "data" / "data1.csv"
-    df = pd.read_csv(_dataUrl)
-    print(f"Data loaded successfully with shape: {df.shape}")
+    _dataPath = Path(os.getcwd()) / "data"
+    _dataName = os.listdir(_dataPath).pop()
+    _dataUrl = _dataPath / _dataName
+    print(_dataUrl)
+    df = pd.read_csv(rf"{_dataUrl}")
+    if df is None:
+        print("Data loading failed.")
+    else:
+        print("Data loaded successfully.")
+
 except Exception as error:
     print(f"An exception occurred: {error}")
