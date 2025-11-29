@@ -11,6 +11,7 @@ try:
     _dataUrl = _dataPath / _dataName
     print(_dataUrl)
     df = pd.read_csv(rf"{_dataUrl}")
+    df['Date'] = pd.to_datetime(df['Date'])
     if df is None:
         print("Data loading failed.")
     else:

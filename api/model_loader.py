@@ -5,7 +5,6 @@ import xgboost as xgb
 try:
   _modelName = os.listdir(os.path.join(os.getcwd(), "models")).pop()
   _modelUrl = Path(os.getcwd()) / "models" / _modelName
-
   model = xgb.XGBRegressor()
   model.load_model(str(_modelUrl))
   if model:
