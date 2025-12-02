@@ -13,6 +13,9 @@ from api.utils.dashboard_utils import (
     above_threshold_level,
     economic_damage,
     dashboard_filter,
+    action_rate,
+    most_affected_field_stage,
+    current_field_stage,
 )
 
 router = APIRouter()
@@ -80,7 +83,6 @@ def kpi_response(request: KPIRequest):
     return {
         "success": True,
         "data": {
-         
             "pest_sum": pest_sum(df, start_date, end_date, season, field_stage),
             "average_pest_count": average_pest_count(
                 df, start_date, end_date, season, field_stage
@@ -90,6 +92,13 @@ def kpi_response(request: KPIRequest):
             ),
             "economic_damage%": economic_damage(
                 df, start_date, end_date, season, field_stage
+            ),
+            "action_rate%": action_rate(df, start_date, end_date, season, field_stage),
+            "most_affected_field_stage": most_affected_field_stage(
+                df, start_date, end_date, season
+            ),
+            "current_field_stage": current_field_stage(
+                df, start_date, end_date, season
             ),
         },
     }
