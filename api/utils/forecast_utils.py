@@ -1,5 +1,6 @@
 import pandas as pd, numpy as np
 
+
 STD_ERROR = 0.6148985557583696
 ROLL_WINDOWS = [3, 5, 7]
 N_LAG = 7
@@ -42,7 +43,7 @@ def create_feature(df):
     return features, y
 
 
-def recursive_forecast(model, features,horizon):
+def recursive_forecast(model, features, horizon):
     z = 1.96  # 95% CI
     predictions = []
     ci_lower = []
@@ -75,7 +76,7 @@ def recursive_forecast(model, features,horizon):
         latest_features["lag_1"] = y_pred
 
         # --- Update rolling statistics ---
-        for w in ROLL_WINDOWS   :
+        for w in ROLL_WINDOWS:
             lags_for_window = [
                 latest_features[f"lag_{i}"] for i in range(1, min(N_LAG, w) + 1)
             ]
@@ -88,16 +89,14 @@ def recursive_forecast(model, features,horizon):
             latest_features[f"ewm_mean_{w}"] = np.mean(lags_for_window)
             latest_features[f"ewm_std_{w}"] = np.std(lags_for_window)
 
-    return  pd.DataFrame(
+    return pd.DataFrame(
         {
-            "date": future_dates,
+            "future_dates": future_dates,
             "forecast": predictions,
             "ci_lower": ci_lower,
             "ci_upper": ci_upper,
         }
     ).to_dict()
-
-
 
 
 def create_sequence():

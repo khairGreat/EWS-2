@@ -6,7 +6,7 @@ import pandas as pd
 from api.data_loader import df
 from api.model_loader import model
 from api.utils.forecast_utils import create_feature, recursive_forecast
-from api._pydanticModel import KPIRequest
+from api._pydanticModel import FilterAll
 from api.utils.dashboard_utils import (
     pest_sum,
     average_pest_count,
@@ -73,7 +73,7 @@ def get_forecast(horizon: int):
     summary="KPI Response",
     description="Compute key performance indicators (KPIs) for a given date range, season, and stage.",
 )
-def kpi_response(request: KPIRequest):
+def kpi_response(request: FilterAll):
 
     start_date = pd.to_datetime(request.start)
     end_date = pd.to_datetime(request.end)

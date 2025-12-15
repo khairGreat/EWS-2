@@ -10,9 +10,10 @@ from api.utils.dashboard_utils import (
     most_affected_field_stage,
     current_field_stage,
 )
-from api._pydanticModel import KPIRequest
+from api._pydanticModel import FilterAll, FilterByDate
 from api.data_loader import df
-
+from api.utils.forecast_utils import create_feature, recursive_forecast
+from api.model_loader import model
 
 dashboard_router = APIRouter(prefix="/dashboard")
 
@@ -27,7 +28,7 @@ def dashboard_root():
     summary="KPI Response",
     description="Compute key performance indicators (KPIs) for a given date range, season, and stage.",
 )
-def dashboard_kpi(request: KPIRequest):
+def dashboard_kpi(request: FilterAll):
     start_date = pd.to_datetime(request.start)
     end_date = pd.to_datetime(request.end)
     season = request.season
@@ -58,28 +59,30 @@ def dashboard_kpi(request: KPIRequest):
 
 
 @dashboard_router.post("/forecast")
-def dashboard_forecast(request: KPIRequest):
-    
-    date = df['Date']
+def dashboard_forecast(request: FilterByDate):
 
+    mask = (df["Date"] >= request.start) & (df["Date"] <= request.end)
+    date_filtered = df[mask]
+    features, y = create_feature(df)
+    forecast = recursive_forecast(model, features, horizon=7)
     return {
         "success": True,
-        "data" : {
-            "date" : "" , 
-            "observed" :  "" ,
-            "forecasted" : "",
-        }
+        "data": {
+            "date": date_filtered["Date"].tolist(),
+            "actual": date_filtered["Pest Count/Damage"].tolist(),
+            "forecasted": forecast,
+        },
     }
 
 
 @dashboard_router.post("/operational")
-def dashboard_operational(request: KPIRequest):
+def dashboard_operational(request: FilterAll):
 
     return {
         "success": True,
-        "data" : {
-            "threshold_status" : "" , 
-            "action_tracker" : "" ,
-            "recent_alerts" : "",
-        }
+        "data": {
+            "threshold_status": "",
+            "action_tracker": "",
+            "recent_alerts": "",
+        },
     }
