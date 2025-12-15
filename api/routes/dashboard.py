@@ -55,5 +55,31 @@ def dashboard_kpi(request: KPIRequest):
             ),
         },
     }
-    
 
+
+@dashboard_router.post("/forecast")
+def dashboard_forecast(request: KPIRequest):
+    
+    date = df['Date']
+
+    return {
+        "success": True,
+        "data" : {
+            "date" : "" , 
+            "observed" :  "" ,
+            "forecasted" : "",
+        }
+    }
+
+
+@dashboard_router.post("/operational")
+def dashboard_operational(request: KPIRequest):
+
+    return {
+        "success": True,
+        "data" : {
+            "threshold_status" : "" , 
+            "action_tracker" : "" ,
+            "recent_alerts" : "",
+        }
+    }

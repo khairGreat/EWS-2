@@ -10,6 +10,7 @@ from api.data_loader import df
 from api.controller import router
 from api.routes.dashboard import dashboard_router
 from api.routes.auth import auth_router
+from api.routes.filters import filter_router
 
 
 app = FastAPI(lifespan=lifespan)
@@ -35,13 +36,8 @@ def root():
     return "Welcome hahaha"
 
 
-@app.get("/filters")
-def filters():
-    return {
-        "success" : True ,
-        "data" : dashboard_filter(df)
-    }
 
 app.include_router(router)
 app.include_router(dashboard_router)
 app.include_router(auth_router)
+app.include_router(filter_router)
