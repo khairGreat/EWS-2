@@ -58,11 +58,9 @@ def dashboard_kpi(request: FilterAll):
     }
 
 
-@dashboard_router.post("/forecast")
-def dashboard_forecast(request: FilterByDate):
+@dashboard_router.get("/forecast")
+def dashboard_forecast():
 
-    mask = (df["Date"] >= request.start) & (df["Date"] <= request.end)
-    date_filtered = df[mask]
     features, y = create_feature(df)
     forecast = recursive_forecast(model, features, horizon=7)
     return {
@@ -70,8 +68,8 @@ def dashboard_forecast(request: FilterByDate):
         "data": {
             "max_pest_count": df["Pest Count/Damage"].max(),
             "min_pest_count": df["Pest Count/Damage"].min(),
-            "date": date_filtered["Date"].tolist(),
-            "actual": date_filtered["Pest Count/Damage"].tolist(),
+            "current_dates": df["Date"].dt.strftime("%Y-%m-%d").tolist(),
+            "actual": df["Pest Count/Damage"].tolist(),
             "forecasted": forecast,
         },
     }

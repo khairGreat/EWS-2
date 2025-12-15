@@ -53,8 +53,10 @@ def recursive_forecast(model, features, horizon):
     latest_features = features.iloc[-1].copy()
     last_date = features.index[-1]  # 2024-12-03
 
-    future_dates = pd.date_range(
-        start=last_date + pd.Timedelta(days=1), periods=horizon
+    future_dates = (
+        pd.date_range(start=last_date + pd.Timedelta(days=1), periods=horizon)
+        .strftime("%Y-%m-%d")
+        .tolist()
     )
 
     for step in range(horizon):
