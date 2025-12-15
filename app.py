@@ -7,11 +7,12 @@ from api.utils.dashboard_utils import dashboard_filter
 from api.data_loader import df
 
 # routers
-from api.controller import router
+
 from api.routes.dashboard import dashboard_router
 from api.routes.auth import auth_router
 from api.routes.filters import filter_router
-
+from api.routes.forecast import forecast_router
+from api.routes.threshold_actions import threshold_router
 
 app = FastAPI(lifespan=lifespan)
 
@@ -36,8 +37,8 @@ def root():
     return "Welcome hahaha"
 
 
-
-app.include_router(router)
 app.include_router(dashboard_router)
 app.include_router(auth_router)
 app.include_router(filter_router)
+app.include_router(forecast_router)
+app.include_router(threshold_router)

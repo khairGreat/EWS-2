@@ -1,5 +1,5 @@
 import pandas as pd, numpy as np
-
+from collections import Counter
 
 STD_ERROR = 0.6148985557583696
 ROLL_WINDOWS = [3, 5, 7]
@@ -101,5 +101,32 @@ def recursive_forecast(model, features, horizon):
     ).to_dict()
 
 
-def create_sequence():
-    pass
+def threshold_status(value):
+    if value < 5:
+        return "Low"
+    elif 5 <= value < 10:
+        return "Moderate"
+    else:
+        return "Severe"
+
+def risk_levels(forecast):
+    
+    r_level = [threshold_status(value) for value in forecast["forecast"].values()]
+    counter = Counter(r_level)
+    most_frequent_risk, frequency = counter.most_common(1)[0]
+    return {
+        "risk_list": r_level,
+        "most_frequent_risk" : most_frequent_risk,
+        "frequency": frequency,
+    } 
+
+def peak_day(forecast):
+    return {
+        "peak_count": np.round(max(forecast["forecast"].values()), 2),
+        "peak_date": forecast["future_dates"][
+            np.argmax(np.array([v for v in forecast["forecast"].values()]))
+        ],
+    }
+
+
+
