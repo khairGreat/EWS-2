@@ -68,6 +68,8 @@ def dashboard_forecast(request: FilterByDate):
     return {
         "success": True,
         "data": {
+            "max_pest_count": df["Pest Count/Damage"].max(),
+            "min_pest_count": df["Pest Count/Damage"].min(),
             "date": date_filtered["Date"].tolist(),
             "actual": date_filtered["Pest Count/Damage"].tolist(),
             "forecasted": forecast,
