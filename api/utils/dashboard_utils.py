@@ -135,3 +135,13 @@ def dashboard_filter(df):
         "field_stage": field_stage,
         "date": {"min": str(df["Date"].min()), "max": str(df["Date"].max())},
     }
+
+def threshold_status_counts(df, start_date, end_date, season=None, field_stage=None):
+    # Use helper
+    filtered_df = filter_dataset(df, start_date, end_date, season, field_stage)
+
+    if filtered_df.empty:
+        return {}
+
+    status_counts = filtered_df["Threshold Status"].value_counts().to_dict()
+    return status_counts

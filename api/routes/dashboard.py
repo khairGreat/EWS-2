@@ -9,6 +9,7 @@ from api.utils.dashboard_utils import (
     action_rate,
     most_affected_field_stage,
     current_field_stage,
+    threshold_status_counts,
 )
 from api._pydanticModel import FilterAll, FilterByDate
 from api.data_loader import df
@@ -77,11 +78,14 @@ def dashboard_forecast():
 
 @dashboard_router.post("/operational")
 def dashboard_operational(request: FilterAll):
-
+    start_date = pd.to_datetime(request.start)
+    end_date = pd.to_datetime(request.end)
+    season = request.season
+    field_stage = request.field_stage
     return {
         "success": True,
         "data": {
-            "threshold_status": "",
+            "threshold_status": threshold_status_counts(df, start_date, end_date, season, field_stage),
             "action_tracker": "",
             "recent_alerts": "",
         },
